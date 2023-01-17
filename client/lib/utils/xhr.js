@@ -15,6 +15,7 @@ function xhrData({
   url = '', 
   body = null, 
   onSuccess = null,
+  onFail = null,
   headers = {
     'Content-Type': 'application/json' // 이건 꼭 해줘야 한다
     //'Access-Control-Allow-Origin': '*' // 동일출처정책의 문제
@@ -43,7 +44,8 @@ function xhrData({
         onSuccess(JSON.parse(response));// 비동기 통신을 써서 return이 안되는듯?
       }  
     }else{
-      console.error('통신 실패');
+      //console.error('통신 실패');
+      onFail("통신에 실패했습니다.")
     }
   });
 
@@ -56,6 +58,9 @@ xhrData({
   url: 'https://jsonplaceholder.typicode.com/users',
   onSuccess: function(result) {
     console.log(result);
+  },
+  onFail: function(err) {
+    console.error(err);
   }
 });
 
