@@ -16,6 +16,7 @@ function xhrData({
   body = null, 
   headers = {
     'Content-Type': 'application/json'
+    //'Access-Control-Allow-Origin': '*'
   }
 }){ 
   // 둘이 세트임
@@ -23,7 +24,13 @@ function xhrData({
   xhr.open(method,url); // 비동기 통신 오픈
 
   // headers세팅
-  xhr.setRequestHeader('name', 'tiger');
+  // headers={'Content-Type': 'application/json'}
+  // 이걸 entries거치면, headers=['Content-Type','application/json'];
+  // 배열이 [[A,B], [C,D], ...]
+  Object.entries(headers).forEach(function([key,value]) {
+    xhr.setRequestHeader(key,value);
+  });
+  
 
   // 객체 구조 분해 할당 -> xhr은 객체이므로 가능
   // xhr이 객체인데 우리는 xhr.status, xhr.readyState, xhr.response이렇게 객체의 것을 꺼내서 쓰고 있어 -> 번거롭다 이거지!
