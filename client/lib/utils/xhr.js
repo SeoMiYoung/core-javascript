@@ -14,9 +14,10 @@ function xhrData({
   method = 'GET', 
   url = '', 
   body = null, 
+  onSuccess = null,
   headers = {
-    'Content-Type': 'application/json'
-    //'Access-Control-Allow-Origin': '*'
+    'Content-Type': 'application/json' // 이건 꼭 해줘야 한다
+    //'Access-Control-Allow-Origin': '*' // 동일출처정책의 문제
   }
 }){ 
   /* --------------------------- 둘이 세트임 --------------------------- */
@@ -24,12 +25,12 @@ function xhrData({
   xhr.open(method,url); // 비동기 통신 오픈
 
   /* --------------------------- headers세팅 -------------------------- */
-  // headers={'Content-Type': 'application/json'}
-  // 이걸 entries거치면, headers=['Content-Type','application/json'];
-  // 배열이 [[A,B], [C,D], ...]
-  Object.entries(headers).forEach(function([key,value]) {
-    xhr.setRequestHeader(key,value);
-  });
+      // headers={'Content-Type': 'application/json'}
+      // 이걸 entries거치면, headers=['Content-Type','application/json'];
+      // 배열이 [[A,B], [C,D], ...]
+  // Object.entries(headers).forEach(function([key,value]) {
+  //   xhr.setRequestHeader(key,value);
+  // });
   
   /* --------------------------- 이벤트 실행 --------------------------- */
   xhr.addEventListener('readystatechange',()=>{
@@ -39,7 +40,7 @@ function xhrData({
     if(status >= 200 && status < 400){
       if(readyState === 4){
         console.log('통신 성공');
-        console.log(JSON.parse(response)); // 뭘 GET했는지 확인
+        onSuccess(JSON.parse(response));// 비동기 통신을 써서 return이 안되는듯?
       }  
     }else{
       console.error('통신 실패');
@@ -51,7 +52,12 @@ function xhrData({
 }
 
 // 순서 상관없는 객체를 넘겨주겠다
-xhrData({url: 'https://jsonplaceholder.typicode.com/users'});
+xhrData({
+  url: 'https://jsonplaceholder.typicode.com/users',
+  onSuccess: function(result) {
+    console.log(result);
+  }
+});
 
 // xhrData('POST','https://jsonplaceholder.typicode.com/users', {
 //   "name": "Mi Young Seo",
