@@ -10,7 +10,10 @@
 
 
 // xhrData 함수 만들기 method, url, body 
-function xhrData(method,url,body){
+function xhrData(options){ // option대신 {method, url, body}가능
+  // 객체의 구조 분해 할당 -> 장점: 초기값 설정 가능
+  const { method='GET', url='', body=null } = options;
+
   // 둘이 세트임
   const xhr = new XMLHttpRequest();
   xhr.open(method,url); // 비동기 통신 오픈
@@ -28,7 +31,7 @@ function xhrData(method,url,body){
     }else{
       console.error('통신 실패');
     }
-  })
+  });
 
   // 서버에 요청
   xhr.send(JSON.stringify(body));
