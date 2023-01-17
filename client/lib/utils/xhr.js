@@ -20,7 +20,7 @@ function xhrData({
     'Content-Type': 'application/json' // 이건 꼭 해줘야 한다
     //'Access-Control-Allow-Origin': '*' // 동일출처정책의 문제
   }
-}){ 
+}={}){ 
   /* --------------------------- 둘이 세트임 --------------------------- */
   const xhr = new XMLHttpRequest();
   xhr.open(method,url); // 비동기 통신 오픈
@@ -53,16 +53,55 @@ function xhrData({
   xhr.send(JSON.stringify(body));
 }
 
-// 순서 상관없는 객체를 넘겨주겠다
-xhrData({
-  url: 'https://jsonplaceholder.typicode.com/users',
-  onSuccess: function(result) {
-    console.log(result);
+/* ------------------- 순서 상관없는 객체를 넘겨주겠다 ------------------- */
+// xhrData({
+//   url: 'https://jsonplaceholder.typicode.com/users',
+//   onSuccess: function(result) {
+//     console.log(result);
+//   },
+//   onFail: function(err) {
+//     console.error(err);
+//   }
+// });
+
+/* ------------ 함수의 자료형은 Function이지만 결국은 Object이다 ---------- */
+// 함수에게 객체처럼 키에 메소드 부여 가능// 메서드xhrData안에서 함수호출
+xhrData.get = function(url,onSuccess,onFail) {
+  xhrData({
+    // GET은 기본값이 GET이므로 안 넘겨줘도 됨
+    // GET은 body전달 필요 없음
+    url,
+    onSuccess,
+    onFail
+  }); 
+}
+
+xhrData.post = function(url,body,onSuccess,onFail) {
+  xhrData({
+    method:'POST',
+    body,
+    url,
+    onSuccess,
+    onFail
+  }); 
+}
+
+xhrData.get(
+  'https://jsonplaceholder.typicode.com/users',
+  function(res) {
+    console.log(res);
   },
-  onFail: function(err) {
-    console.error(err);
+  function(err) {
+    console.log(err);
   }
-});
+)
+
+
+
+
+
+
+
 
 // xhrData('POST','https://jsonplaceholder.typicode.com/users', {
 //   "name": "Mi Young Seo",
